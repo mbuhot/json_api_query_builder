@@ -3,8 +3,6 @@ defmodule JsonApiQueryBuilder.Include do
   Related resource include operations for JsonApiQueryBuilder
   """
 
-  import Ecto.Query
-
   @doc """
   Applies related resource inclusion from a parsed JSON-API request to an `Ecto.Queryable.t` as preloads.
 
