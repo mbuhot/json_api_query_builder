@@ -92,11 +92,11 @@ defmodule Article do
     @impl JsonApiQueryBuilder
     def filter(query, "tag", value), do: from(a in query, where: ^value in a.tag_list)
     def filter(query, "comments", params) do
-      comment_query = from(Comment.Query.build(params), select: [:article_id], distinct: true)
+      comment_query = from(Comment, select: [:article_id], distinct: true) |> Comment.Query.filter(params)
       from a in query, join: c in ^subquery(comment_query), on: a.id == c.article_id
     end
     def filter(query, "author", params) do
-      user_query = from(User.Query.build(params), select: [:id])
+      user_query = from(User, select: [:id]) |> User.Query.filter(params)
       from a in query, join: u in ^subquery(user_query), on: a.user_id == u.id
     end
 
@@ -105,7 +105,7 @@ defmodule Article do
       from query, preload: [comments: ^Comment.Query.build(comment_params)]
     end
     def include(query, "author", author_params) do
-      from query, preload: [author: ^User.Query.build(author_params)]
+      from query, select_merge: [:author_id], preload: [author: ^User.Query.build(author_params)]
     end
   end
 end
@@ -130,6 +130,58 @@ defmodule ArticleController do
     ])
   end
 end
+```
+
+## Generated Queries
+
+Using `join:` queries for filtering based on relationships, `preload:` queries for included resources and `select:` lists for sparse fieldsets, the generated queries are as efficient as what you would write by hand.
+
+Eg the following index request:
+
+```elixir
+params = %{
+  "fields" => %{
+    "article" => "description",
+    "comment" => "body",
+    "user" => "email,username"
+  },
+  "filter" => %{
+    "articles.tag" => "animals"
+  },
+  "include" => "articles,articles.comments,articles.comments.user"
+}
+Blog.Repo.all(Blog.User.Query.build(params))
+```
+
+Produces one join query for filtering, and 3 preload queries
+
+```
+[debug] QUERY OK source="users" db=3.8ms decode=0.1ms queue=0.1ms
+SELECT u0."email", u0."username", u0."id"
+FROM "users" AS u0
+INNER JOIN (
+  SELECT DISTINCT a0."user_id" AS "user_id"
+  FROM "articles" AS a0
+  WHERE ($1 = ANY(a0."tag_list"))
+) AS s1
+ON u0."id" = s1."user_id" ["animals"]
+
+[debug] QUERY OK source="articles" db=1.9ms
+SELECT a0."description", a0."id", a0."user_id"
+FROM "articles" AS a0
+WHERE (a0."user_id" = ANY($1))
+ORDER BY a0."user_id" [[2, 1]]
+
+[debug] QUERY OK source="comments" db=1.7ms
+SELECT c0."body", c0."id", c0."user_id", c0."article_id"
+FROM "comments" AS c0
+WHERE (c0."article_id" = ANY($1))
+ORDER BY c0."article_id" [[4, 3, 2, 1]]
+
+[debug] QUERY OK source="users" db=1.3ms
+SELECT u0."email", u0."username", u0."id", u0."id"
+FROM "users" AS u0
+WHERE (u0."id" = $1) [2]
 ```
 
 ## License
