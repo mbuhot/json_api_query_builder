@@ -3,6 +3,6 @@ defmodule JsonApiQueryBuilderTest do
   doctest JsonApiQueryBuilder
 
   test "test" do
-    assert 1 == 1
+    assert 2 == 2
   end
 end
