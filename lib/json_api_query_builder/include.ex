@@ -3,17 +3,16 @@ defmodule JsonApiQueryBuilder.Include do
   Related resource include operations for JsonApiQueryBuilder
   """
 
+  import Ecto.Query
+
   @doc """
   Applies related resource inclusion from a parsed JSON-API request to an `Ecto.Queryable.t` as preloads.
 
   The given callback will be invoked for each included relationship with a new JSON-API style request.
   """
   @spec include(Ecto.Queryable.t, map, function) :: Ecto.Queryable.t
-  def include(query, params, callback) do
-    includes =
-      params
-      |> Map.get("include", "")
-      |> group_includes()
+  def include(query, params = %{"include" => include}, callback) do
+    includes = group_includes(include)
 
     Enum.reduce(includes, query, fn
       {relationship, related_includes}, query ->
@@ -25,6 +24,7 @@ defmodule JsonApiQueryBuilder.Include do
         callback.(query, relationship, related_params)
     end)
   end
+  def include(query, _params, _callback, _opts), do: query
 
   @doc """
   Groups the `include` string by leading path segment.

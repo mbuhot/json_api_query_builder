@@ -39,7 +39,7 @@ defmodule JsonApiQueryBuilder.Filter do
     ```
     def apply_filter(query, "tag", val), do: from(article in query, where: ^val in article.tag_list)
     def apply_filter(query, "author", params) do
-      user_query = from(User.Query.build(params), select: [:id])
+      user_query = from(User, select: [:id]) |> User.Query.filter(params)
       from(article in query, join: user in ^subquery(user_query), on: article.user_id == user.id)
     end
     ```
