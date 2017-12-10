@@ -3,5 +3,7 @@ defmodule JsonApiQueryBuilderTest do
   doctest JsonApiQueryBuilder
   doctest JsonApiQueryBuilder.Include
   doctest JsonApiQueryBuilder.Filter
+  doctest JsonApiQueryBuilder.Sort
+  doctest JsonApiQueryBuilder.Fields
 
 end
