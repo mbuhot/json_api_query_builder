@@ -16,7 +16,7 @@ The package can be installed by adding `json_api_query_builder` to your list of 
 
 ```elixir
 def deps do
-  [{:json_api_query_builder, "~> 0.1"}]
+  [{:json_api_query_builder, "~> 1.0"}]
 end
 ```
 
