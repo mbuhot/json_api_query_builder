@@ -105,7 +105,8 @@ defmodule JsonApiQueryBuilder do
       """
       @spec build(map) :: Ecto.Queryable.t
       def build(params) do
-        from(@schema)
+        @schema
+        |> from()
         |> filter(params)
         |> fields(params)
         |> sort(params)
@@ -355,7 +356,7 @@ defmodule JsonApiQueryBuilder do
     @spec is_join_filter?([String.t], String.t) :: boolean
     def is_join_filter?(relationships, filter) do
       Enum.any?(relationships, fn relationship ->
-        String.starts_with?(filter, relationship<>".")
+        String.starts_with?(filter, relationship <> ".")
       end)
     end
 
@@ -405,7 +406,7 @@ defmodule JsonApiQueryBuilder do
       {
         relation,
         rel_filters
-        |> Enum.map(fn {k, v} -> {String.trim_leading(k, relation<>"."), v} end)
+        |> Enum.map(fn {k, v} -> {String.trim_leading(k, relation <> "."), v} end)
         |> Enum.into(%{})
       }
     end
