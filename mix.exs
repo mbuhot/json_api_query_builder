@@ -1,14 +1,28 @@
 defmodule JsonApiQueryBuilder.Mixfile do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :json_api_query_builder,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+
+      #Docs
+      source_url: "https://github.com/mbuhot/json_api_query_builder",
+      homepage_url: "https://github.com/mbuhot/json_api_query_builder",
+      docs: [extras: ["README.md"], main: "readme", source_ref: "v#{@version}"]
     ]
+  end
+
+  defp package do
+    [maintainers: ["Michael Buhot"],
+     licenses: ["MIT"],
+     links: %{"Github" => "https://github.com/mbuhot/json_api_query_builder"}]
   end
 
   # Run "mix help compile.app" to learn about applications.
@@ -21,6 +35,7 @@ defmodule JsonApiQueryBuilder.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ecto, "~> 2.2"},
       {:dialyxir, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:inch_ex, "~> 0.5", only: [:dev, :test]},
