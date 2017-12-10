@@ -1,7 +1,7 @@
 defmodule JsonApiQueryBuilder.Mixfile do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "1.0.0"
 
   def project do
     [
@@ -10,6 +10,7 @@ defmodule JsonApiQueryBuilder.Mixfile do
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       deps: deps(),
+      description: "Build Ecto queries from JSON-API requests",
       package: package(),
 
       #Docs
