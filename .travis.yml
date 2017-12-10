@@ -1,0 +1,24 @@
+language: elixir
+elixir: '1.5'
+otp_release: '20.1'
+
+cache:
+  directories:
+    - _build
+    - deps
+
+install:
+  - mix local.hex --force
+  - mix local.rebar --force
+  - mix deps.get
+
+before_script:
+  - mix clean
+
+script:
+  - mix test
+  - mix credo
+  - mix dialyzer --halt-exit-status
+
+after_script:
+  - mix inch.report
