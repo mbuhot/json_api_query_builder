@@ -22,7 +22,7 @@ defmodule JsonApiQueryBuilder.Include do
         callback.(query, relationship, related_params)
     end)
   end
-  def include(query, _params, _callback, _opts), do: query
+  def include(query, _params, _callback), do: query
 
   @doc """
   Groups the `include` string by leading path segment.
