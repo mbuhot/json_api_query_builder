@@ -7,7 +7,7 @@ defmodule JsonApiQueryBuilder.Mixfile do
     [
       app: :json_api_query_builder,
       version: @version,
-      elixir: "~> 1.5",
+      elixir: "~> 1.10",
       start_permanent: Mix.env == :prod,
       deps: deps(),
       description: "Build Ecto queries from JSON-API requests",
