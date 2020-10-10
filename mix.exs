@@ -36,11 +36,11 @@ defmodule JsonApiQueryBuilder.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 2.2"},
-      {:dialyxir, "~> 0.5", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
-      {:inch_ex, "~> 0.5", only: :dev, runtime: false},
-      {:credo, "~> 0.8", only: :dev, runtime: false}
+      {:ecto, "~> 3.5"},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:inch_ex, "~> 2.0", only: :dev, runtime: false},
+      {:credo, "~> 1.4", only: :dev, runtime: false}
     ]
   end
 end
